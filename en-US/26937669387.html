@@ -1,0 +1,168 @@
+﻿<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="en-US"><head xmlns:forms="http://www.schema.de/2010/ST4/Layout/MarkupLanguage/Forms"><meta http-equiv="Content-Script-Type" content="text/javascript" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><meta name="generator" content="SCHEMA ST4, Bootstrap 2019 v1" /><meta name="id" content="26937669387" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="msapplication-config" content="none" /><meta name="description" content="[SP_TR] Determination of room temperature setpoints" /><link rel="icon" type="image/x-icon" href="../assets/ico/favicon.ico" /><link layout-comment="OpenIconic-Font" rel="stylesheet" href="../assets/css/open-iconic-bootstrap.min.css" /><link rel="stylesheet" href="../assets/css/base_ltr/01-bootstrap.min.css" /><link rel="stylesheet" href="../assets/css/base_ltr/07-jquery.typeahead.min.css" /><link rel="stylesheet" href="../assets/css/schema-glyphs.css" /><link rel="stylesheet" href="../assets/css/formats.css" /><link rel="stylesheet" href="../assets/css/custom.css" /><link rel="stylesheet" href="../assets/css/custom/custom_fonts.css" /><link rel="stylesheet" href="../assets/css/custom/custom_typeahead.css" /><meta name="prev" content="14845744395" /><meta name="next" content="16853565835" /><script>var fileExtension = "html";</script><title>[SP_TR] Determination of room temperature setpoints</title></head><body class="schema-index content-container container" id="26937669387" lang="en-US" xmlns:forms="http://www.schema.de/2010/ST4/Layout/MarkupLanguage/Forms" data-node-id="26937669387" data-culture="en-US" dir="ltr"><header class="d-print-none"><nav class="d-flex" aria-label="Breadcrumb Naviagation"><ol class="breadcrumb "><li class="breadcrumb-item"><a class="schema-iframe-link schema-breadcrumb-link" href="#" data-node-id="index_content">Home</a></li><li class="breadcrumb-item"><a class="schema-iframe-link schema-breadcrumb-link" href="#" data-node-id="15246172939">Programming library</a></li><li class="breadcrumb-item"><a class="schema-iframe-link schema-breadcrumb-link" href="#" data-node-id="14096341515">Function blocks</a></li><li class="breadcrumb-item active">[SP_TR] Determination of room temperature setpoints</li></ol></nav></header><article class="highlightable" role="main" aria-labelledby="heading-26937669387"><h1 id="heading-26937669387">[SP_TR] Determination of room temperature setpoints</h1><div class="alias"></div><div class="textmodule" id="26937681931"><div class="metalist"></div>
+<p>SP_TR allows for central definition of room setpoints for heating and cooling in all operating modes. SP_TR has several setpoints due to setpoint corrections. [SpHCmf] is the base setpoint. If [SpHCmf] is increased or decreased, other setpoints are increased or decreased accordingly. One or several correction values are used to update the room setpoints.</p> </div><div class="textmodule" id="26937687691">
+<h2>Functioning</h2> 
+<p>The following functions are integrated in SP_TR:</p> 
+<ul class="list"><li value="1">Correction for room setpoints for Comfort, Pre-Comfort, and Economy (heating, cooling).</li><li value="2">Adjustment of dependent room setpoints based on the setpoint shift model.</li></ul> 
+<p>SP_TR calculates all present room setpoints based on the active setpoint corrections and of a setpoint shift model.</p> 
+<table class="table tabletype-header table-fixed" aria-label="" data-legend-id="ID0EW1FDB"><colgroup><col style="width: 10%;"></col><col style="width: 90%;"></col></colgroup><thead><tr><th><p class="text-start">Step</p></th><th><p class="text-start">Process</p></th></tr></thead><tbody><tr><td><p class="text-start">1</p></td><td><p class="text-start">Heating setpoint for Comfort</p> 
+<p class="text-start">[PrSpHCmf] = [SpHCmf] + [SpcHCmf]</p> 
+<p class="text-start">The upper limit is [SpCPrt] - [DMinSpHC]; the lower limit is [SpHPrt]. </p> 
+<p class="text-start">Example 1: Setpoint correction via [SpcHCmf].</p></td></tr><tr><td><p class="text-start">2</p></td><td><p class="text-start">Cooling setpoint for Comfort.</p> 
+<p class="text-start">[PrSpCCmf] = [SpCCmf] + maximum of ([SpcCCmf], [SpcHCmf]).</p> 
+<p class="text-start">The upper limit is [SpCPrt]; the lower limit is [PrSpHCmf] + [DMinSpHC]. Example 2: Setpoint correction via [SpcCCmf].</p> 
+<ul class="list"><li value="1">[SpcHCmf] only shifts [PrSpCCmf] up. Example 1: Setpoint correction via [SpcHCmf].</li><li value="2">[SpcHCmf] and [SpcCCmf], both of which have the same value, shift [PrSpCCmf] up and down. Example 7: Simultaneous setpoint correction via [SpcHCmf] and [SpcCCmf].</li></ul></td></tr><tr><td><p class="text-start">3</p></td><td><p class="text-start">Cooling setpoint for Pre-Comfort.</p> 
+<p class="text-start">[PrSpCPcf] = [SpCPcf] + maximum of ([SpcCCmf], [SpcHCmf]).</p> 
+<p class="text-start">The upper limit is [SpCPrt]; the lower limit is [PrSpCCmf]. Example 3: Setpoint correction via [SpcCCmf].</p> 
+<ul class="list"><li value="1">[SpcHCmf] only shifts [PrSpCPcf] up. Example 1: Setpoint correction via [SpcHCmf].</li></ul> 
+<p class="text-start">Analogous: [SpcCCmf]. Example 2: Setpoint correction via [SpcCCmf].</p></td></tr><tr><td><p class="text-start">4</p></td><td><p class="text-start">Cooling setpoint for Economy.</p> 
+<p class="text-start">[PrSpCEco] = [SpCEco] + [SpcCEco].</p> 
+<p class="text-start">Or if [PrSpCPcf] &gt; [SpCEco]:</p> 
+<p class="text-start">[PrSpCEco] = [SpCEco] + maximum of ([SpcCEco], SpcCCmf], [SpcHCmf]).</p> 
+<p class="text-start">The upper limit is [SpCPrt]; the lower limit is [PrSpCPcf]. Example 4: Setpoint correction via [SpcCEco].</p> 
+<ul class="list"><li value="1">[SpcHCmf] only shifts [PrSpCEco] up. Prerequisite: [PrSpCPcf] &gt; [SpCEco]. Example 1: Setpoint correction via [SpcHCmf].</li></ul> 
+<p class="text-start">Analogous: [SpcCCmf]. Example 2: Setpoint correction via [SpcCCmf].</p> 
+<p class="text-start">Analogous: [SpcCCmf]. Example 3: Setpoint correction via [SpcCCmf].</p></td></tr><tr><td><p class="text-start">5</p></td><td><p class="text-start">Heating setpoint for Pre-Comfort.</p> 
+<p class="text-start">[PrSpHPcf] = [SpHPcf] + [SpcHPcf].</p> 
+<p class="text-start">The upper limit is [SpCCmf]; the lower limit is [SpHPrt]. Example 5: Setpoint correction via [SpcHPcf].</p> 
+<ul class="list"><li value="1">[SpcHCmf] only shifts [PrSpCPcf] down. Example 1: Setpoint correction via [SpcHCmf].</li></ul></td></tr><tr><td><p class="text-start">6</p></td><td><p class="text-start">Heating setpoint for Economy.</p> 
+<p class="text-start">[PrSpHEco] = [SpHEco] + [SpcHEco]</p> 
+<p class="text-start">Or if [PrSpHPcf] &gt; [SpHEco]:</p> 
+<p class="text-start">[PrSpHEco] = [SpHEco] + minimum of ([SpcHPcf], [SpcHCmf]).</p> 
+<p class="text-start">The upper limit is [SpHPcf]; the lower limit is [SpHPrt]. Example 6: Setpoint correction via [SpcHEco].</p></td></tr></tbody></table> 
+<p><strong>Example 1</strong></p> 
+<p>Setpoint correction via [SpcHCmf]</p> 
+<figure class="img_original" aria-label="Fig. "><img src="../Images/gif/9007203234677899__en__Web.gif" width="386" height="407" /></figure> 
+<p>Calculation rules:</p> 
+<ul class="list"><li value="1">If [SpHCmf] increases or decreases, all other setpoints except [SpCPrt] and [SpHPrt] increase or decrease accordingly.</li><li class="list-indent-1"><strong>Example: </strong>[SpHCmf] increases by 2 °C. The other setpoints (except [SpCPrt] and [SpHPrt]) also increase by 2 °C.</li><li value="2">The cooling setpoints [PrSpCCmf], [PrSpCPcf] are raised by [SpcHCmf].</li><li value="3">The heating setpoint [PrSpHPcf] is lowered by [SpcHCmf]</li><li value="4">The cooling setpoint [PrSpCEco] is raised along with [PrSpCPcf]. The heating setpoint [PrSpHEco] is lowered along with [PrSpHPcf]</li><li value="5">[SpCPrt] and [SpHPrt] limit all present setpoints [PrSp...].</li><li value="6">The difference between [PrSpCCmf] and [PrSpCPcf], or between [PrSpHCmf] and [PrSpHPcf] becomes smaller only at the limits [SpCPrt] or [SpHPrt].</li><li value="7">The difference between [PrSpHCmf] and [PrSpCCmf] is always equal or greater to [DMinSpHC]. Accordingly, [PrSpHCmf] has an upper limit.</li></ul> 
+<p><strong>Example 2</strong></p> 
+<p>Setpoint correction via [SpcCCmf]</p> 
+<figure class="img_original" aria-label="Fig. "><img src="../Images/gif/18014402489420555__en__Web.gif" width="422" height="401" /></figure> 
+<p>Calculation rules:</p> 
+<ul class="list"><li value="1">The cooling setpoint [PrSpCPcf] is raised by [SpcCCmf].</li><li value="2">The cooling setpoint [PrSpCEco] is raised along with [PrSpCPcf].</li><li value="3">[SpcCCmf] does not influence the heating setpoints [PrSpH...].</li><li value="4">[SpCPrt] and [SpHCmf] + [DMinSpHC] limit [PrSpCCmf].</li><li value="5">The difference between [PrSpCCmf] and [PrSpCPcf] becomes smaller only at the limit [SpCPrt].</li><li value="6">The difference between [PrSpHCmf] and [PrSpCCmf] is always equal or greater to [DMinSpHC]. Accordingly, [PrSpCCmf] has a lower limit.</li></ul> 
+<p><strong>Example 3</strong></p> 
+<p>Setpoint correction via [SpcCCmf]</p> 
+<figure class="img_original" aria-label="Fig. "><img src="../Images/gif/9007203234681227__en__Web.gif" width="379" height="404" /></figure> 
+<p>Calculation rules:</p> 
+<ul class="list"><li value="1">The cooling setpoint [PrSpCEco] is raised along [PrSpCPcf].</li><li value="2">[SpcCCmf] does not influence the heating setpoints [PrSpH...] and [PrSpCCmf].</li><li value="3">[SpCPrt] and [SpCCmf] limit [PrSpCPcf].</li></ul> 
+<p><strong>Example 4</strong></p> 
+<p>Setpoint correction via [SpcCEco]</p> 
+<figure class="img_original" aria-label="Fig. "><img src="../Images/gif/18014402489423883__en__Web.gif" width="379" height="404" /></figure> 
+<p>Calculation rules:</p> 
+<ul class="list"><li value="1">[SpcCEco] does not influence the heating setpoints [PrSpH...] and [PrSpCCmf], [PrSpCPcf].</li><li value="2">[SpCPrt] and [SpCPcf] limit [PrSpCEco].</li></ul> 
+<p><strong>Example 5</strong></p> 
+<p>Setpoint correction via [SpcHPcf]</p> 
+<figure class="img_original" aria-label="Fig. "><img src="../Images/gif/9007203234684555__en__Web.gif" width="377" height="403" /></figure> 
+<p>Calculation rules:</p> 
+<ul class="list"><li value="1">The cooling setpoint [PrSpHEco] is lowered along with [PrSpHPcf].</li><li value="2">[SpcHPcf] does not influence the cooling setpoints [PrSpC...] and [PrSpHCmf].</li><li value="3">[SpHCmf] and [SpHPrt] limit [PrSpHPcf].</li></ul> 
+<p><strong>Example 6</strong></p> 
+<p>Setpoint correction via [SpcHEco]</p> 
+<figure class="img_original" aria-label="Fig. "><img src="../Images/gif/9007203234686219__en__Web.gif" width="384" height="425" /></figure> 
+<p>Calculation rules:</p> 
+<ul class="list"><li value="1">[SpcHEco] does not influence the cooling setpoints [PrSpC...] and [PrSpHCmf], [PrSpHPcf].</li><li value="2">[SpHPcf] and [SpHPrt] limit [PrSpHEco].</li></ul> 
+<p><strong>Example 7</strong></p> 
+<p>Simultaneous setpoint correction via [SpcHCmf] and [SpcCCmf]</p> 
+<p>The following diagram shows the behavior during a simultaneous, parallel shift of [PrSpHCmf] and [PrSpCCmf] by the same value. This is typical behavior for knobs with a mechanically stored locked state.</p> 
+<figure class="img_original" aria-label="Fig. "><img src="../Images/gif/9007203234687883__en__Web.gif" width="409" height="416" /></figure> 
+<p>Because [PrSpHCmf] is the manager (calculated first), it moves all upper curves prior to calculation.</p><div class="image"></div><div class="image"></div><div class="image"></div><div class="image"></div><div class="image"></div><div class="image"></div><div class="image"></div><div class="linklist"></div></div><div class="textmodule" id="26937694603">
+<h2>Pins</h2> 
+
+<table class="table tabletype-header table-fixed" id="18014414096042251" aria-label="" data-legend-id="ID0EQNGDB"><colgroup><col style="width: 17.4%;"></col><col style="width: 52.1%;"></col><col style="width: 12.4%;"></col><col style="width: 17.9%;"></col></colgroup><thead><tr><th><p class="text-start">Input</p></th><th><p class="text-start">Description</p></th><th><p class="text-start">Data type</p></th><th><p class="text-start">Default value<br />Value range</p></th></tr></thead><tbody><tr><td id="27353923339"> 
+<p class="text-start">SpCPrt</p></td><td><p class="text-start"><span class="variable">Cooling setpoint for protection</span></p> 
+<p class="text-start">Condition: [SpCPrt] &lt;= [SpMax], and [SpCPrt] &gt;= [SpHPrt] + [DMinSpHC].</p> </td><td><p class="text-start">Real</p></td><td><p class="text-start">40.0 [°C]<br />104.0 [°F]</p> </td></tr><tr><td id="27354259083"> 
+<p class="text-start">SpCEco</p></td><td><p class="text-start"><span class="variable">Cooling setpoint for economy</span></p> 
+<p class="text-start">Condition: [SpCEco] &lt;= [SpCPrt], and [SpCEco] &gt;= [SpCPcf].</p> 
+<p class="text-start"> </p></td><td><p class="text-start">Real</p></td><td><p class="text-start">35.0 [°C]<br />95.0 [°F]</p> </td></tr><tr><td id="27354459531"> 
+<p class="text-start"><span>SpcCEco</span></p></td><td><p class="text-start"><span class="variable">Cooling setpoint correction for economy</span></p></td><td><p class="text-start">Real</p></td><td><p class="text-start">0.0 [K]<br />0.0 [°F]</p> </td></tr><tr><td id="27354491659"> 
+<p class="text-start">SpCPcf</p></td><td><p class="text-start"><span class="variable">Cooling setpoint for pre-comfort</span></p></td><td><p class="text-start">Real</p></td><td><p class="text-start">28.0 [°C]<br />82.0 [°F]</p> </td></tr><tr><td id="27354984459"> 
+<p class="text-start"><span>SpcCPcf</span></p></td><td><p class="text-start"><span class="variable">Cooling setpoint correction for pre-comfort</span></p></td><td><p class="text-start">Real</p></td><td><p class="text-start">0.0 [K]<br />0.0 [°F]</p> </td></tr><tr><td id="27355030411"> 
+<p class="text-start">SpCCmf</p></td><td><p class="text-start"><span class="variable">Cooling setpoint for comfort</span></p> 
+<p class="text-start">Condition: [SpCCmf] &lt;= [SpCPrt], and [SpCCmf] &gt;= [SpHCmf] + [DMinSpHC].</p></td><td><p class="text-start">Real</p></td><td><p class="text-start">26.0 [°C]<br />78.8 [°F]</p> </td></tr><tr><td id="27355073675"> 
+<p class="text-start"><span>SpcCCmf</span></p></td><td><p class="text-start"><span class="variable">Cooling setpoint correction for comfort</span></p></td><td><p class="text-start">Real</p></td><td><p class="text-start">0.0 [K]<br />0.0 [°F]</p> </td></tr><tr><td id="27355117451"> 
+<p class="text-start">SpHCmf</p></td><td><p class="text-start"><span class="variable">Heating setpoint for comfort</span></p> 
+<p class="text-start">Condition: [SpHCmf] &gt;= [SpHPrt], and [SpHCmf] &lt;= [SpHCmf] - [DMinSpHC].</p></td><td><p class="text-start">Real</p></td><td><p class="text-start">21.0 [°C]<br />69.8 [°F]</p> </td></tr><tr><td id="27355092619"> 
+<p class="text-start"><span>SpcHCmf</span></p></td><td><p class="text-start"><span class="variable">Heating setpoint correction for comfort</span></p></td><td><p class="text-start">Real</p></td><td><p class="text-start">0.0 [K]<br />0.0 [°F]</p> </td></tr><tr><td id="27356839435"> 
+<p class="text-start">SpHPcf</p></td><td><p class="text-start"><span class="variable">Heating setpoint for pre-comfort</span></p> 
+<p class="text-start">Condition: [SpHPcf] &gt;= [SpHPrt], and [SpHPcf] &lt;= [SpHCmf].</p></td><td><p class="text-start">Real</p></td><td><p class="text-start">19.0 [°C]<br />66.2 [°F]</p></td></tr><tr><td id="27357259147"> 
+<p class="text-start"><span>SpcHPcf</span></p></td><td><p class="text-start"><span class="variable">Heating setpoint correction for pre-comfort</span></p></td><td><p class="text-start">Real</p></td><td><p class="text-start">0.0 [K]<br />0.0 [°F]</p></td></tr><tr><td id="27356870795"> 
+<p class="text-start">SpHEco</p></td><td><p class="text-start"><span class="variable">Heating setpoint for economy</span></p> 
+<p class="text-start">Condition: [SpHEco] &gt;= [SpHPrt], and [SpHEco] &lt;= [SpHPcf].</p></td><td><p class="text-start">Real</p></td><td><p class="text-start">15.0 [°C]<br />59.0 [°F]</p> </td></tr><tr><td id="27357279627"> 
+<p class="text-start"><span>SpcHEco</span></p></td><td><p class="text-start"><span class="variable">Heating setpoint correction for economy</span></p></td><td><p class="text-start">Real</p></td><td><p class="text-start">0.0 [K]<br />0.0 [°F]</p></td></tr><tr><td id="27356927755"> 
+<p class="text-start">SpHPrt</p></td><td><p class="text-start"><span class="variable">Heating setpoint for protection</span></p> 
+<p class="text-start">Condition: [SpHPrt] &gt;= [SpMin], and [SpHPrt] &lt;= [SpMax] - [DMinSpHC].</p></td><td><p class="text-start">Real</p></td><td><p class="text-start">12.0 [°C]<br />53.6 [°F]</p> </td></tr><tr><td id="27357371787"> 
+<p class="text-start"><span>DMinSpHC</span></p></td><td><p class="text-start"><span class="variable">Delta minimum heating-cooling setpoint</span></p> 
+<p class="text-start">Smallest difference between the highest heating setpoint and the lowest cooling setpoint</p></td><td><p class="text-start">Real</p></td><td><p class="text-start">0.5 [K]<br />0.9 [°F]</p> 
+<p class="text-start">0.0…3.4E38 [K]<br />0.0…3.4E38 [°F]</p></td></tr><tr><td id="27356959115"> 
+<p class="text-start"><span>SpMax</span></p></td><td><p class="text-start"><span class="variable">Maximum setpoint</span></p> 
+<p class="text-start">Maximum setpoint which a present setpoint [Pr...] must not exceed.</p></td><td><p class="text-start">Real</p></td><td><p class="text-start">40.0 [°C]<br />104.0 [°F]</p> </td></tr><tr><td id="27357351307"> 
+<p class="text-start"><span>SpMin</span></p></td><td><p class="text-start"><span class="variable">Minimum setpoint</span></p> 
+<p class="text-start">Minimum setpoint which a present setpoint [Pr...] must not exceed.</p></td><td><p class="text-start">Real</p></td><td><p class="text-start">10.0 [C]<br />50.0 [°F]</p> 
+<p class="text-start">0.0…3.4E38 [K]<br />32.0…3.4E38 [°F]</p></td></tr></tbody></table> 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+<p> </p> 
+
+<table class="table tabletype-header table-fixed" id="18014414170256011" aria-label="" data-legend-id="ID0EQNGDB"><colgroup><col style="width: 17.4%;"></col><col style="width: 52.1%;"></col><col style="width: 12.4%;"></col><col style="width: 17.9%;"></col></colgroup><thead><tr><th><p class="text-start">Output</p></th><th><p class="text-start">Description</p></th><th><p class="text-start">Data type</p></th><th><p class="text-start">Default value<br />Value range</p></th></tr></thead><tbody><tr><td id="27357487499"> 
+<p class="text-start">PrSpCPrt</p></td><td><p class="text-start"><span class="variable">Present cooling setpoint for protection</span></p></td><td><p class="text-start">Real</p></td><td><p class="text-start">0 [°C]<br />32.0 [°F]</p> </td></tr><tr><td id="27357891595"> 
+<p class="text-start">PrSpCEco</p></td><td><p class="text-start"><span class="variable">Present cooling setpoint for economy</span></p></td><td><p class="text-start">Real</p></td><td><p class="text-start">0 [°C]<br />32.0 [°F]</p> </td></tr><tr><td id="27357911691"> 
+<p class="text-start">PrSpCPcf</p></td><td><p class="text-start"><span class="variable">Present cooling setpoint for pre-comfort</span></p></td><td><p class="text-start">Real</p></td><td><p class="text-start">0 [°C]<br />32.0 [°F]</p> </td></tr><tr><td id="27357931787"> 
+<p class="text-start">PrSpCCmf</p></td><td><p class="text-start"><span class="variable">Present cooling setpoint for comfort</span></p></td><td><p class="text-start">Real</p></td><td><p class="text-start">0 [°C]<br />32.0 [°F]</p> </td></tr><tr><td id="27357951883"> 
+<p class="text-start">PrSpHCmf</p></td><td><p class="text-start"><span class="variable">Present heating setpoint for comfort</span></p></td><td><p class="text-start">Real</p></td><td><p class="text-start">0 [°C]<br />32.0 [°F]</p></td></tr><tr><td id="27357984779"> 
+<p class="text-start">PrSpHPcf</p></td><td><p class="text-start"><span class="variable">Present heating setpoint for pre-comfort</span></p></td><td><p class="text-start">Real</p></td><td><p class="text-start">0 [°C]<br />32.0 [°F]</p></td></tr><tr><td id="27358004875"> 
+<p class="text-start">PrSpHEco</p></td><td><p class="text-start"><span class="variable">Present heating setpoint for economy</span></p></td><td><p class="text-start">Real</p></td><td><p class="text-start">0 [°C]<br />32.0 [°F]</p></td></tr><tr><td id="27358024971"> 
+<p class="text-start">PrSpHPrt</p></td><td><p class="text-start"><span class="variable">Present heating setpoint for protection</span></p></td><td><p class="text-start">Real</p></td><td><p class="text-start">0 [°C]<br />32.0 [°F]</p> </td></tr><tr><td id="15709572747" rowspan="2"> 
+<p class="text-start"><span>SysUnits</span></p></td><td><p class="text-start"><span class="variable">System of units</span></p> 
+<p class="text-start">Indicates the <a class="schema-iframe-link" data-node-id="15756881291" id="schema-linklist-link15756881291" href="15756881291.html">system of units</a> used by the block.</p></td><td><p class="text-start">Integer</p></td><td><p class="text-start">1: <span class="variable">International system of units (SI) (fallback)</span></p> 
+<p class="text-start">1...5</p></td></tr><tr><td colspan="3"><p class="text-start">1: <span class="variable">International system of units (SI) (fallback)</span><br />2: <span class="variable">International system of units (SI)</span><br />3: <span class="variable">US system of units</span><br />4: <span class="variable">Imperial system of units</span><br />5: <span class="variable">Canadian system of units</span></p>
+</td></tr><tr><td id="15709580811" rowspan="2">
+<p class="text-start">ErrCode</p></td><td><p class="text-start"><span class="variable">Error code indication</span></p></td><td><p class="text-start">Integer</p></td><td><p class="text-start">0: <span class="variable">No error</span></p></td></tr><tr><td colspan="3"><p class="text-start">= 0 - <span class="variable">No error</span><br />&gt; 0 - <a class="schema-iframe-link" data-node-id="14157693067" id="schema-linklist-link14157693067" href="14157693067.html">Error codes</a></p></td></tr></tbody></table> 
+
+
+
+
+
+
+
+
+
+<div class="linklist"></div><div class="linklist"></div><div class="linklist"></div><div class="linklist"></div><div class="linklist"></div><div class="linklist"></div><div class="linklist"></div><div class="linklist"></div><div class="linklist"></div><div class="linklist"></div><div class="linklist"></div><div class="linklist"></div><div class="linklist"></div><div class="linklist"></div><div class="linklist"></div><div class="linklist"></div><div class="linklist"></div><div class="linklist"></div><div class="linklist"></div><div class="linklist"></div><div class="linklist"></div><div class="linklist"></div><div class="linklist"></div><div class="linklist"></div><div class="linklist"></div><div class="linklist"><a class="schema-iframe-link" data-node-id="15756881291" id="schema-linklist-link15756881291" href="15756881291.html"></a></div><div class="linklist"><a class="schema-iframe-link" data-node-id="14157693067" id="schema-linklist-link14157693067" href="14157693067.html"></a></div><div class="linklist"><a class="schema-iframe-link" data-node-id="26937669387" id="schema-linklist-link26937669387" href="26937669387.html#15586560267"></a><a class="schema-iframe-link" data-node-id="26937669387" id="schema-linklist-link26937669387" href="26937669387.html#15660774027"></a><a class="schema-iframe-link" data-node-id="26937669387" id="schema-linklist-link26937669387" href="26937669387.html#27354259083"></a><a class="schema-iframe-link" data-node-id="26937669387" id="schema-linklist-link26937669387" href="26937669387.html#27353923339"></a><a class="schema-iframe-link" data-node-id="26937669387" id="schema-linklist-link26937669387" href="26937669387.html#27354459531"></a><a class="schema-iframe-link" data-node-id="26937669387" id="schema-linklist-link26937669387" href="26937669387.html#27354491659"></a><a class="schema-iframe-link" data-node-id="26937669387" id="schema-linklist-link26937669387" href="26937669387.html#27354984459"></a><a class="schema-iframe-link" data-node-id="26937669387" id="schema-linklist-link26937669387" href="26937669387.html#27355030411"></a><a class="schema-iframe-link" data-node-id="26937669387" id="schema-linklist-link26937669387" href="26937669387.html#27355073675"></a><a class="schema-iframe-link" data-node-id="26937669387" id="schema-linklist-link26937669387" href="26937669387.html#27355092619"></a><a class="schema-iframe-link" data-node-id="26937669387" id="schema-linklist-link26937669387" href="26937669387.html#27355117451"></a><a class="schema-iframe-link" data-node-id="26937669387" id="schema-linklist-link26937669387" href="26937669387.html#27356839435"></a><a class="schema-iframe-link" data-node-id="26937669387" id="schema-linklist-link26937669387" href="26937669387.html#27356870795"></a><a class="schema-iframe-link" data-node-id="26937669387" id="schema-linklist-link26937669387" href="26937669387.html#27356927755"></a><a class="schema-iframe-link" data-node-id="26937669387" id="schema-linklist-link26937669387" href="26937669387.html#27356959115"></a><a class="schema-iframe-link" data-node-id="26937669387" id="schema-linklist-link26937669387" href="26937669387.html#27357259147"></a><a class="schema-iframe-link" data-node-id="26937669387" id="schema-linklist-link26937669387" href="26937669387.html#27357351307"></a><a class="schema-iframe-link" data-node-id="26937669387" id="schema-linklist-link26937669387" href="26937669387.html#27357279627"></a><a class="schema-iframe-link" data-node-id="26937669387" id="schema-linklist-link26937669387" href="26937669387.html#27357371787"></a><a class="schema-iframe-link" data-node-id="26937669387" id="schema-linklist-link26937669387" href="26937669387.html#27357487499"></a><a class="schema-iframe-link" data-node-id="26937669387" id="schema-linklist-link26937669387" href="26937669387.html#27357891595"></a><a class="schema-iframe-link" data-node-id="26937669387" id="schema-linklist-link26937669387" href="26937669387.html#27357911691"></a><a class="schema-iframe-link" data-node-id="26937669387" id="schema-linklist-link26937669387" href="26937669387.html#27357931787"></a><a class="schema-iframe-link" data-node-id="26937669387" id="schema-linklist-link26937669387" href="26937669387.html#27357951883"></a><a class="schema-iframe-link" data-node-id="26937669387" id="schema-linklist-link26937669387" href="26937669387.html#27357984779"></a><a class="schema-iframe-link" data-node-id="26937669387" id="schema-linklist-link26937669387" href="26937669387.html#27358004875"></a><a class="schema-iframe-link" data-node-id="26937669387" id="schema-linklist-link26937669387" href="26937669387.html#27358024971"></a><a class="schema-iframe-link" data-node-id="26937669387" id="schema-linklist-link26937669387" href="26937669387.html#15709572747"></a><a class="schema-iframe-link" data-node-id="26937669387" id="schema-linklist-link26937669387" href="26937669387.html#15709580811"></a></div></div><div class="textmodule" id="26937712651">
+<h2>Application</h2> 
+<p><strong>Summer/winter compensation</strong></p> 
+<p>The setpoint correction for summer/winter compensation can be interconnected directly.</p> 
+<p><strong>Room operator unit with knob</strong></p> 
+<p>A room operator unit with a knob can be interconnected directly.</p></div><div class="textmodule" id="26937701899">
+<h2>Example</h2> 
+<p>The following diagram shows an example for summer/winter compensation and a room operator unit with a knob.</p> 
+<figure class="img_original" aria-label="Fig. "><img src="../Images/png/18014402813416587__en__Web.png" width="537" height="515" /></figure><div class="image"></div><div class="linklist"></div></div><div class="image"></div><div class="image"></div><div class="image"></div><div class="image"></div><div class="image"></div><div class="image"></div><div class="image"></div><div class="image"></div></article><footer><p class="text-muted">ABT Programming Library Help
+</p><p class="text-muted" aria-label="copyright">© 2014 Siemens Schweiz AG</p></footer><script src="../assets/js/00-jquery-3.6.3.min.js"></script><script src="../assets/js/01-popper.min.js"></script><script src="../assets/js/02-schema.js"></script><script src="../assets/js/03-snap.svg-min.js"></script><script src="../assets/js/04-schema-common-search.js"></script><script src="../assets/js/05-svg-highlight.js"></script><script src="../assets/js/22-highlight-function.js"></script><script src="../assets/js/23-jquery-typeahead.min.js"></script><script src="../assets/js/24-autocompletion.js"></script><script src="../assets/js/25-collapsible.js"></script><script src="../assets/js/32-highlight-results.js"></script><script src="../assets/js/50-show-highlight-results.js"></script><script src="../assets/js_ltr/06-bootstrap.min.js"></script><script src="../assets/js_iframe/00-schema-iframe.js"></script></body></html>
